@@ -10,7 +10,9 @@ info: Microsoft.Hosting.Lifetime[14]
       Now listening on: http://localhost:5256
 ```
 
-You may be prompted to install the dev certificate.  
+You may be prompted to install the dev certificate.
+
+You can access the OpenApi documentation at `https://localhost:7256/swagger/index.html`
 
 ## Request
 ```
@@ -33,3 +35,4 @@ https://localhost:7256/ExchangeRateHistory?Dates=2022-05-24&Dates=2022-05-23&Dat
 ```
 
 # Limitations
+There is no validation for symbols. https://api.exchangerate.host/symbols should implement this and check if it is a valid symbol.
