@@ -14,7 +14,7 @@ public class ExchangeRateHistoryRequest : IExchangeRateHistoryRequest
     /// <summary>
     /// Collection of dates to search.
     /// </summary>
-    [Required, MinLength(1)]
+    [Required, MinLength(1), HistoricalDates]
     public DateTimeOffset[] Dates { get; set; } = Array.Empty<DateTimeOffset>();
 
     /// <summary>

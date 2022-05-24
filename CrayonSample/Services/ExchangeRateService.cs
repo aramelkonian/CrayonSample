@@ -22,7 +22,9 @@ public class ExchangeRateService : IExchangeRateService
 
     public async Task<ExchangeRateHistoryResponse> GetHistory(IExchangeRateHistoryRequest request)
     {
-        var history = await History(request);
+        var dates = request.Dates.Where(x => x.Date.Date <= DateTime.UtcNow.Date);
+
+        var history = await RetrieveHistory(dates, request.FromSymbol, request.ToSymbol);
 
         var average = history.Values.Average();
         var minKvp = history.MinBy(x => x.Value);
@@ -36,7 +38,7 @@ public class ExchangeRateService : IExchangeRateService
         };
     }
 
-    private async Task<IDictionary<string, decimal>> History(IExchangeRateHistoryRequest request)
+    private async Task<IDictionary<string, decimal>> RetrieveHistory(IEnumerable<DateTimeOffset> dates, string fromSymbol, string toSymbol)
     {
         var httpResponses = new List<Task<HttpResponseMessage>>();
         var history = new Dictionary<string, decimal>();
@@ -44,13 +46,13 @@ public class ExchangeRateService : IExchangeRateService
         var client = _httpClientFactory.CreateClient("exchangerate.host");
 
         // Remove duplicate dates.
-        var parsedDates = request.Dates.Select(d => d.ToString("yyyy-MM-dd"))
+        var parsedDates = dates.Select(d => d.ToString("yyyy-MM-dd"))
             .Distinct();
 
         // Batch all requests
         foreach (var date in parsedDates)
         {
-            var endpoint = $"{date}?base={request.FromSymbol}&symbols={request.ToSymbol}";
+            var endpoint = $"{date}?base={fromSymbol}&symbols={toSymbol}";
             httpResponses.Add(client.GetAsync(endpoint));
         }
 
