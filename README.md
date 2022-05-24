@@ -1,5 +1,6 @@
 # CrayonSample
 
+## Terminal
 Requires **.NET 6** to run the application.  
 Open a terminal at the root of the application and enter `dotnet run`.  
 
@@ -9,10 +10,13 @@ info: Microsoft.Hosting.Lifetime[14]
 info: Microsoft.Hosting.Lifetime[14]
       Now listening on: http://localhost:5256
 ```
-
-You may be prompted to install the dev certificate.
-
 You can access the OpenApi documentation at `https://localhost:7256/swagger/index.html`
+
+## Visual Studio 2022
+Open the `CrayonSample.sln`.  
+Press `F5` or click `Run`.  
+
+> You may be prompted to install the dev certificate.  
 
 ## Request
 ```
@@ -35,4 +39,8 @@ https://localhost:7256/ExchangeRateHistory?Dates=2022-05-24&Dates=2022-05-23&Dat
 ```
 
 # Limitations
-There is no validation for symbols. https://api.exchangerate.host/symbols should implement this and check if it is a valid symbol.
+* There is no validation for symbols. https://api.exchangerate.host/symbols should implement this and check if it is a valid symbol.  
+* Only successful requests to https://api.exchangerate.host/ are processed. Could potentially include a list of failed requests (dates).  
+* Duplicate dates are silently discarded. 
+* Basic request validation.  
+> Required fields, array length and check for past dates - an invalid date could still be provided if it is too far in the past.
